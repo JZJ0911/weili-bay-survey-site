@@ -254,7 +254,7 @@
 
 
   // ---------- GitHub Issues 提交（token 已用暗号加密） ----------
-  var TOK_CT = "157KACxVCDmv417ceJRV47sbIPzLeVjVh6cPfe63dj333Szc/oC7pA==", TOK_SALT = "uQSZvFhQdlGJZBlO/eT5vg==", TOK_ITER = 200000;
+  var TOK_CT = "KwLIy4krVJKUZxGahP/92mqGnbnm9dsKHpuXvY5QeoVBuPC0S+/JdQ==", TOK_SALT = "4IOPS2XbqN8Xmec7sJyxrQ==", TOK_ITER = 200000;
   var DATA_REPO = "JZJ0911/weili-bay-survey-data";
 
   function b64d(s) {
@@ -358,14 +358,28 @@
         window.scrollTo(0, 0);
         return;
       }
-      if (j.ok) {
+      if (res.status === 428 || j.code === 'NEED_PASS') {
+        btn.disabled = false; btn.textContent = '提交问卷';
+        err.style.display = 'block';
+        err.textContent = '请先在下面填一下「填写暗号」再提交～';
+        var _pb = document.getElementById('pass');
+        if (_pb) { _pb.scrollIntoView({ behavior: 'smooth', block: 'center' }); _pb.focus(); }
+        return;
+      }
+      if (j.ok || res.status === 201) {
         try { localStorage.setItem('mbw_submitted', '1'); } catch (e) {}
         document.getElementById('form').style.display = 'none';
         document.querySelector('footer').style.display = 'none';
         document.getElementById('done').style.display = 'block';
         window.scrollTo(0, 0);
       } else { throw new Error('bad'); }
-    }).catch(function () {
+    }).catch(function (err0) {
+      if (err0 && err0.code === 'BAD_PASS') {
+        btn.disabled = false; btn.textContent = '提交问卷';
+        err.style.display = 'block';
+        err.textContent = '暗号不对，再看一下我发的口令～';
+        return;
+      }
       btn.disabled = false; btn.textContent = '提交问卷';
       err.style.display = 'block'; err.textContent = '网络不太稳，再点一次试试～';
     });
