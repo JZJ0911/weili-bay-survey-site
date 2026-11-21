@@ -203,11 +203,6 @@
   <p style="color:#5b7085;font-size:14px">你的回答已经记录，会用于《魅力湾区》调研报告的统计分析。<br>可以关掉这个页面了。</p>
 </div>
 
-<div class="passbox">
-  <b>填写暗号</b>
-  <p>发放问卷时告诉大家的 4-8 位口令，用来确认你是真人。</p>
-  <input id="pass" type="text" inputmode="latin" autocomplete="off" placeholder="输入暗号，例如 wanqu2026">
-</div>
 <footer>
   <button class="btn" id="submit">提交问卷</button>
   <p class="hint" id="hint">匿名填写 · 数据仅用于课程调研</p>
@@ -254,7 +249,8 @@
 
 
   // ---------- GitHub Issues 提交（token 已用暗号加密） ----------
-  var TOK_CT = "ROFUkHa+eXTAgv6aRhpxolkBXXf1+nmHLe75rMQTRIdPXfKHht7SzQ==", TOK_SALT = "sL7VpK6zpsl/B59wLNiD8Q==", TOK_ITER = 200000;
+  var TOK_CT = "VpVEYGQGyqt4WkhdLUpL8qxokrlza9VL1Dfp399/v93+pL6NxgK0Ow==", TOK_SALT = "sVpa2lrxwSTEn2dKXec2zg==", TOK_ITER = 200000;
+  var BUILTIN_PASS = "wanqu2026";
   var DATA_REPO = "JZJ0911/weili-bay-survey-data";
 
   function b64d(s) {
@@ -280,12 +276,8 @@
   }
 
   function sendAnswers(answers, token) {
-    var passEl = document.getElementById('pass');
-    var pass = (passEl && passEl.value || '').trim();
-    if (!pass) {
-      return Promise.resolve({ status: 428, json: function () { return Promise.resolve({ code: 'NEED_PASS' }); } });
-    }
-    return unlock(pass).catch(function () {
+    // 不再要求填写暗号：用内置口令解出 token（页面源码可见，靠 token 权限与随时撤销控制风险）
+    return unlock(BUILTIN_PASS).catch(function () {
       return Promise.reject({ code: 'BAD_PASS' });
     }).then(function (tok) {
       var now = new Date();
@@ -370,7 +362,7 @@
         try { localStorage.setItem('mbw_submitted', '1'); } catch (e) {}
         document.getElementById('form').style.display = 'none';
         document.querySelector('footer').style.display = 'none';
-        var _pbx = document.querySelector('.passbox'); if (_pbx) _pbx.style.display = 'none';var _pin = document.getElementById('pass'); if (_pin) _pin.value = ''; document.getElementById('done').style.display = 'block';
+        document.getElementById('done').style.display = 'block';
         window.scrollTo(0, 0);
       } else { throw new Error('bad'); }
     }).catch(function (err0) {
