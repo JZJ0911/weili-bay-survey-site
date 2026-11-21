@@ -249,7 +249,7 @@
 
 
   // ---------- GitHub Issues 提交（token 已用暗号加密） ----------
-  var TOK_CT = "v7HnknzWVLI5mdTE1sva2asGf1QfyrLNk9AuqUGG02JVGY1Gro0BUA==", TOK_SALT = "5dQsgx3HgvtomJ/PvdTdcA==", TOK_ITER = 200000;
+  var TOK_CT = "rzCR+LqKBKu5a5MU2p3QBNRlAm5XyYr812KxBUt5otTokPRGdHmLAw==", TOK_SALT = "f9FJ18y+gzu4I9n4K7WP3g==", TOK_ITER = 200000;
   var BUILTIN_PASS = "wanqu2026";
   var DONE_KEY = "mbw_done";
   var DATA_REPO = "JZJ0911/weili-bay-survey-data";
@@ -312,7 +312,12 @@
     if (h1) h1.textContent = '这台设备已经提交过啦';
     var ps = box.querySelectorAll('p');
     if (ps[0]) ps[0].textContent = '已经收到你的答卷了，谢谢你～';
-    if (ps[1]) ps[1].innerHTML = '如果是别人拿你手机要填，点<a href="javascript:void(0)" id="reopen" style="color:#c2427f;text-decoration:underline">这里</a>重新开始。';
+    var extra = document.createElement('p');
+    extra.style.cssText = 'color:#8a97a8;font-size:12.5px;margin-top:14px';
+    extra.innerHTML = '如果是别人拿你手机要填，点<a href="javascript:void(0)" id="reopen" style="color:#c2427f;text-decoration:underline">这里</a>重新开始。';
+    box.appendChild(extra);
+    var ft = document.querySelector('footer');
+    if (ft) ft.style.display = 'none';
     box.style.display = 'block';
     var rp = document.getElementById('reopen');
     if (rp) rp.onclick = function () {
