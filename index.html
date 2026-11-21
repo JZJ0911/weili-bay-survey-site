@@ -249,7 +249,7 @@
 
 
   // ---------- GitHub Issues 提交（token 已用暗号加密） ----------
-  var TOK_CT = "VpVEYGQGyqt4WkhdLUpL8qxokrlza9VL1Dfp399/v93+pL6NxgK0Ow==", TOK_SALT = "sVpa2lrxwSTEn2dKXec2zg==", TOK_ITER = 200000;
+  var TOK_CT = "m51QK7I+xGo80GezYoWaecyvrW7sdaez1YmYFnLZM/0U8ZJDpJvz1g==", TOK_SALT = "QROUe6AWQ3ppEdfD3Sx5RA==", TOK_ITER = 200000;
   var BUILTIN_PASS = "wanqu2026";
   var DATA_REPO = "JZJ0911/weili-bay-survey-data";
 
@@ -359,6 +359,8 @@
         return;
       }
       if (j.ok || res.status === 201) {
+        var _e0 = document.getElementById('err');
+        if (_e0) { _e0.style.display = 'none'; _e0.textContent = ''; }
         try { localStorage.setItem('mbw_submitted', '1'); } catch (e) {}
         document.getElementById('form').style.display = 'none';
         document.querySelector('footer').style.display = 'none';
