@@ -1,0 +1,404 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f2a44">
+<title>魅力湾区 · 青年感知调查</title>
+<style>
+  :root{
+    --ink:#12253a; --sub:#5b7085; --line:#e3e9f0;
+    --blue:#17456b; --blue2:#2b6f9e; --gold:#c8a15a; --bg:#f5f8fb;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.65 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    -webkit-text-size-adjust:100%}
+  header{background:linear-gradient(160deg,#0d2439,#17456b 55%,#1f5b86);color:#fff;padding:26px 20px 22px}
+  .eyebrow{font-size:11px;letter-spacing:.14em;opacity:.75;margin:0 0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  h1{margin:0 0 8px;font-size:22px;line-height:1.35;font-weight:700}
+  header p{margin:0;font-size:13px;color:#c9dcea;line-height:1.6}
+  .bar{display:flex;gap:6px;margin-top:16px}
+  .bar i{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.22)}
+  .bar i.on{background:var(--gold)}
+  main{padding:16px 14px 120px;max-width:640px;margin:0 auto}
+  section{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 16px 6px;margin:12px 0;
+    box-shadow:0 1px 2px rgba(18,37,58,.04)}
+  h2{font-size:15px;margin:0 0 12px;padding-left:9px;border-left:3px solid var(--blue2);line-height:1.3}
+  h2 small{display:block;font-weight:400;font-size:12px;color:var(--sub);margin-top:3px;border:0;padding:0}
+  .q{padding:12px 0;border-top:1px solid #f0f4f8}
+  .q:first-of-type{border-top:0}
+  .q b{display:block;font-size:14.5px;font-weight:600;margin-bottom:9px;line-height:1.5}
+  .opt{display:flex;align-items:flex-start;gap:9px;padding:9px 11px;border:1px solid var(--line);
+    border-radius:10px;margin:7px 0;font-size:14px;background:#fbfdff;cursor:pointer}
+  .opt:active{transform:scale(.995)}
+  .opt input{margin:3px 0 0;accent-color:var(--blue2)}
+  .opt.sel{border-color:var(--blue2);background:#eef6fd}
+  textarea{width:100%;min-height:74px;border:1px solid var(--line);border-radius:10px;padding:10px;
+    font:inherit;font-size:14px;background:#fbfdff;resize:vertical}
+  .scale{display:flex;gap:6px;margin-top:4px}
+  .scale label{flex:1;text-align:center;border:1px solid var(--line);border-radius:9px;padding:9px 0;
+    font-size:13px;background:#fbfdff;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:.15s}
+  .scale input{display:none}
+  .scale label.sel{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .notice{margin:0;padding:14px 18px 15px;background:#fffdf6;border-bottom:1px solid #f0e6cf;
+    font-size:12.5px;line-height:1.72;color:#6b5c3e}
+  .notice b{display:block;font-size:13px;color:#8a6d2f;letter-spacing:.04em;margin-bottom:4px}
+  .notice span{display:block}
+  .notice i{font-style:normal;color:#a08c62}
+  .tip{font-size:12px;color:var(--sub);margin:6px 0 10px}
+  .passbox{margin:0 0 12px;padding:13px 15px;background:#fff;border:1px solid var(--line);border-radius:12px}
+  .passbox b{display:block;font-size:13.5px;color:var(--blue)}
+  .passbox p{margin:4px 0 8px;font-size:12px;color:var(--sub);line-height:1.55}
+  .passbox input{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font:inherit;font-size:14px;background:#fbfdff}
+  footer{position:fixed;left:0;right:0;bottom:0;background:rgba(245,248,251,.96);border-top:1px solid var(--line);
+    padding:10px 14px calc(10px + env(safe-area-inset-bottom));backdrop-filter:blur(8px)}
+  .btn{display:block;width:100%;max-width:640px;margin:0 auto;border:0;border-radius:12px;padding:14px;
+    font-size:16px;font-weight:700;color:#fff;background:linear-gradient(135deg,#17456b,#2b82b8);
+    box-shadow:0 6px 16px rgba(23,69,107,.25)}
+  .btn:disabled{opacity:.55}
+  .hint{text-align:center;font-size:12px;color:var(--sub);margin:8px 0 0}
+  .done{display:none;text-align:center;padding:40px 20px}
+  .done .ok{width:64px;height:64px;border-radius:50%;margin:0 auto 14px;
+    background:linear-gradient(135deg,#2b82b8,#17456b);color:#fff;font-size:32px;line-height:64px}
+  .err{color:#b4342b;font-size:13px;margin:6px 0 0;display:none}
+</style>
+</head>
+<body>
+<header>
+  <p class="eyebrow">MAGNIFICENT GREATER BAY AREA</p>
+  <h1>魅力湾区：你眼中的粤港澳大湾区</h1>
+  <p>“走在前列的广东实践”课程调研<br>共 12 题，约 2 分钟，匿名填写</p>
+  <div class="bar" id="bar"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+</header>
+
+<div class="notice">
+  <b>免责声明</b>
+  <span>本问卷由 <strong>DeepSeek Harness</strong> 生成，仅用于“走在前列的广东实践”课程的学习与研究。</span>
+  <span>全程匿名，不收集姓名、手机号、身份证号等任何可识别个人身份的信息，不涉及隐私与敏感问题。</span>
+  <span><i>所收集数据仅用于本次课程作业的整体统计与分析，不作商业用途、不对外提供。</i></span>
+</div>
+
+<main id="form">
+  <section>
+    <h2>一、关于你<small>只做整体统计，不会识别个人</small></h2>
+    <div class="q" data-q="q1">
+      <b>1. 你的年龄段</b>
+      <label class="opt"><input type="radio" name="q1" value="18岁以下">18 岁以下</label>
+      <label class="opt"><input type="radio" name="q1" value="18-25岁">18–25 岁</label>
+      <label class="opt"><input type="radio" name="q1" value="26-35岁">26–35 岁</label>
+      <label class="opt"><input type="radio" name="q1" value="36-45岁">36–45 岁</label>
+      <label class="opt"><input type="radio" name="q1" value="45岁以上">45 岁以上</label>
+    </div>
+    <div class="q" data-q="q2">
+      <b>2. 你目前与粤港澳大湾区的关系</b>
+      <label class="opt"><input type="radio" name="q2" value="在大湾区学习">在大湾区学习</label>
+      <label class="opt"><input type="radio" name="q2" value="在大湾区工作">在大湾区工作</label>
+      <label class="opt"><input type="radio" name="q2" value="在大湾区生活">在大湾区生活（非学生/上班族）</label>
+      <label class="opt"><input type="radio" name="q2" value="不在大湾区，但关注">不在大湾区，但关注这里</label>
+      <label class="opt"><input type="radio" name="q2" value="曾经在大湾区">曾经在这里学习/工作/生活</label>
+    </div>
+  </section>
+
+  <section>
+    <h2>二、你眼中的湾区魅力<small>选最符合直觉的一项</small></h2>
+    <div class="q" data-q="q3">
+      <b>3. 提到“魅力湾区”，你最先想到的是</b>
+      <label class="opt"><input type="radio" name="q3" value="城市天际线与地标">城市天际线与地标（广州塔、深中通道、港珠澳大桥…）</label>
+      <label class="opt"><input type="radio" name="q3" value="机会与活力">机会多、节奏快、有奔头</label>
+      <label class="opt"><input type="radio" name="q3" value="生活方式">生活方式（早茶、夜市、海边、演出）</label>
+      <label class="opt"><input type="radio" name="q3" value="文化与岭南底蕴">岭南文化与历史底蕴</label>
+      <label class="opt"><input type="radio" name="q3" value="开放与国际化">开放、国际化、跨境便利</label>
+    </div>
+    <div class="q" data-q="q4">
+      <b>4. 你觉得大湾区最有“魅力”的城市是</b>
+      <div class="tip">最多选 2 项</div>
+      <label class="opt"><input type="checkbox" name="q4" value="广州">广州</label>
+      <label class="opt"><input type="checkbox" name="q4" value="深圳">深圳</label>
+      <label class="opt"><input type="checkbox" name="q4" value="珠海">珠海</label>
+      <label class="opt"><input type="checkbox" name="q4" value="佛山">佛山</label>
+      <label class="opt"><input type="checkbox" name="q4" value="东莞">东莞</label>
+      <label class="opt"><input type="checkbox" name="q4" value="惠州/中山/江门/肇庆">惠州 / 中山 / 江门 / 肇庆</label>
+      <label class="opt"><input type="checkbox" name="q4" value="香港/澳门">香港 / 澳门</label>
+    </div>
+    <div class="q" data-q="q5">
+      <b>5. 湾区最能打动你的“软魅力”是什么</b>
+      <div class="tip">最多选 2 项</div>
+      <label class="opt"><input type="checkbox" name="q5" value="包容不排外">包容、不排外，外地人也能扎根</label>
+      <label class="opt"><input type="checkbox" name="q5" value="烟火气">烟火气（茶楼、夜市、大排档）</label>
+      <label class="opt"><input type="checkbox" name="q5" value="自然与海岸">海岸线、绿道、公园</label>
+      <label class="opt"><input type="checkbox" name="q5" value="文化多元">广府/潮汕/客家 + 港澳多元文化</label>
+      <label class="opt"><input type="checkbox" name="q5" value="人情味">街坊之间的人情味</label>
+    </div>
+    <div class="q" data-q="q6">
+      <b>6. 如果向外地朋友推荐，你会带他去哪里</b>
+      <textarea name="q6" placeholder="比如：珠海情侣路看日落、广州永庆坊、深圳湾骑行……写一两个就行"></textarea>
+    </div>
+  </section>
+
+  <section>
+    <h2>三、便利与期待<small>1 分=很不满意，5 分=很满意</small></h2>
+    <div class="q" data-q="q7">
+      <b>7. 对湾区“轨道交通 + 跨境通关”的便利度打分</b>
+      <div class="scale" data-name="q7">
+        <label><input type="radio" name="q7" value="1">1</label>
+        <label><input type="radio" name="q7" value="2">2</label>
+        <label><input type="radio" name="q7" value="3">3</label>
+        <label><input type="radio" name="q7" value="4">4</label>
+        <label><input type="radio" name="q7" value="5">5</label>
+      </div>
+    </div>
+    <div class="q" data-q="q8">
+      <b>8. 对湾区“就业与实习机会”的满意度</b>
+      <div class="scale" data-name="q8">
+        <label><input type="radio" name="q8" value="1">1</label>
+        <label><input type="radio" name="q8" value="2">2</label>
+        <label><input type="radio" name="q8" value="3">3</label>
+        <label><input type="radio" name="q8" value="4">4</label>
+        <label><input type="radio" name="q8" value="5">5</label>
+      </div>
+    </div>
+    <div class="q" data-q="q9">
+      <b>9. 对湾区“文化场馆与夜间生活”的满意度</b>
+      <div class="scale" data-name="q9">
+        <label><input type="radio" name="q9" value="1">1</label>
+        <label><input type="radio" name="q9" value="2">2</label>
+        <label><input type="radio" name="q9" value="3">3</label>
+        <label><input type="radio" name="q9" value="4">4</label>
+        <label><input type="radio" name="q9" value="5">5</label>
+      </div>
+    </div>
+    <div class="q" data-q="q10">
+      <b>10. 毕业后你是否愿意留在湾区发展</b>
+      <label class="opt"><input type="radio" name="q10" value="非常愿意">非常愿意</label>
+      <label class="opt"><input type="radio" name="q10" value="愿意">愿意</label>
+      <label class="opt"><input type="radio" name="q10" value="看机会">看机会，哪里合适去哪里</label>
+      <label class="opt"><input type="radio" name="q10" value="不太愿意">不太愿意</label>
+      <label class="opt"><input type="radio" name="q10" value="还不确定">还不确定</label>
+    </div>
+    <div class="q" data-q="q11">
+      <b>11. 你觉得湾区最需要提升的是</b>
+      <div class="tip">最多选 2 项</div>
+      <label class="opt"><input type="checkbox" name="q11" value="住房成本">住房成本</label>
+      <label class="opt"><input type="checkbox" name="q11" value="通勤与交通">通勤与交通</label>
+      <label class="opt"><input type="checkbox" name="q11" value="就业质量">就业质量与薪资</label>
+      <label class="opt"><input type="checkbox" name="q11" value="公共服务">医疗、教育等公共服务</label>
+      <label class="opt"><input type="checkbox" name="q11" value="文化氛围">文化氛围与城市活力</label>
+      <label class="opt"><input type="checkbox" name="q11" value="生态环境">生态环境与海岸线保护</label>
+    </div>
+  </section>
+
+  <section>
+    <h2>四、说一句<small>选填</small></h2>
+    <div class="q" data-q="q12">
+      <b>12. 用一句话形容你心里的“湾区魅力”</b>
+      <textarea name="q12" placeholder="选填，但它会出现在报告里"></textarea>
+    </div>
+  </section>
+</main>
+
+<div class="done" id="done">
+  <div class="ok">✓</div>
+  <h1 style="font-size:20px;color:#12253a">收到，谢谢你！</h1>
+  <p style="color:#5b7085;font-size:14px">你的回答已经记录，会用于《魅力湾区》调研报告的统计分析。<br>可以关掉这个页面了。</p>
+</div>
+
+<div class="passbox">
+  <b>填写暗号</b>
+  <p>发放问卷时告诉大家的 4-8 位口令，用来确认你是真人。</p>
+  <input id="pass" type="text" inputmode="latin" autocomplete="off" placeholder="输入暗号，例如 wanqu2026">
+</div>
+<footer>
+  <button class="btn" id="submit">提交问卷</button>
+  <p class="hint" id="hint">匿名填写 · 数据仅用于课程调研</p>
+  <p class="err" id="err">还有题没选完，往上翻一下看看～</p>
+</footer>
+
+<script>
+(function () {
+  var REQUIRED = ['q1','q2','q3','q4','q5','q7','q8','q9','q10','q11'];
+  var MAX = { q4: 2, q5: 2, q11: 2 };
+  var form = document.getElementById('form');
+  var bar = document.querySelectorAll('#bar i');
+
+  // 选项选中态
+  form.addEventListener('change', function (e) {
+    var t = e.target;
+    var q = t.closest('.q');
+    if (t.type === 'radio') {
+      var opt = t.closest('.opt');
+      if (opt) {
+        q.querySelectorAll('.opt').forEach(function (o) { o.classList.remove('sel'); });
+        opt.classList.add('sel');
+      }
+      var lab = t.closest('label');
+      if (lab && lab.parentNode && lab.parentNode.classList.contains('scale')) {
+        lab.parentNode.querySelectorAll('label').forEach(function (l) { l.classList.remove('sel'); });
+        lab.classList.add('sel');
+      }
+    } else {
+      t.closest('.opt').classList.toggle('sel', t.checked);
+      var name = t.name, max = MAX[name] || 99;
+      var picked = q.querySelectorAll('input:checked');
+      if (picked.length > max) { t.checked = false; t.closest('.opt').classList.remove('sel'); }
+    }
+    progress();
+  });
+
+  function progress() {
+    var done = 0;
+    REQUIRED.forEach(function (n) { if (document.querySelector('input[name="' + n + '"]:checked')) done++; });
+    var step = Math.min(5, Math.floor(done / 2));
+    bar.forEach(function (el, i) { el.classList.toggle('on', i <= step); });
+  }
+
+
+  // ---------- GitHub Issues 提交（token 已用暗号加密） ----------
+  var TOK_CT = "aR/uoZkPy6gzwMqGf7fGO9CjdSkm8pAKyvA9uLjzCFpdi0Q7hotRQQ==", TOK_SALT = "XptiUHUdPtlx6OABufqnqg==", TOK_ITER = 200000;
+  var DATA_REPO = "JZJ0911/weili-bay-survey-data";
+
+  function b64d(s) {
+    var bin = atob(s), out = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+
+  function unlock(pass) {
+    var enc = new TextEncoder();
+    return crypto.subtle.importKey('raw', enc.encode(pass), 'PBKDF2', false, ['deriveBits'])
+      .then(function (km) {
+        return crypto.subtle.deriveBits(
+          { name: 'PBKDF2', salt: b64d(TOK_SALT), iterations: TOK_ITER, hash: 'SHA-256' },
+          km, b64d(TOK_CT).length * 8);
+      })
+      .then(function (bits) {
+        var ks = new Uint8Array(bits), ct = b64d(TOK_CT), out = '';
+        for (var i = 0; i < ct.length; i++) out += String.fromCharCode(ct[i] ^ ks[i]);
+        if (out.indexOf('ghp_') !== 0) throw new Error('bad-pass');
+        return out;
+      });
+  }
+
+  function sendAnswers(answers, token) {
+    var passEl = document.getElementById('pass');
+    var pass = (passEl && passEl.value || '').trim();
+    if (!pass) {
+      return Promise.resolve({ status: 428, j: { code: 'NEED_PASS' } });
+    }
+    return unlock(pass).catch(function () {
+      return Promise.reject({ code: 'BAD_PASS' });
+    }).then(function (tok) {
+      var now = new Date();
+      var pad = function (n) { return n < 10 ? '0' + n : '' + n; };
+      var title = '[答卷] ' + now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate())
+        + ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+      var payload = { answers: answers, token: token, ts: now.toISOString(), ua: navigator.userAgent.slice(0, 180) };
+      return fetch('https://api.github.com/repos/' + DATA_REPO + '/issues', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + tok, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github+json' },
+        body: JSON.stringify({ title: title, body: '```json\n' + JSON.stringify(payload, null, 2) + '\n```' })
+      }).then(function (r) {
+        return r.text().then(function (t) {
+          var j = {}; try { j = JSON.parse(t); } catch (e) {}
+          return { status: r.status, j: j };
+        });
+      });
+    });
+  }
+
+  // 提交
+  var btn = document.getElementById('submit');
+  btn.addEventListener('click', function () {
+    var answers = {}, missing = [];
+    REQUIRED.forEach(function (n) {
+      var els = Array.prototype.slice.call(document.querySelectorAll('input[name="' + n + '"]:checked'));
+      if (!els.length) { missing.push(n); return; }
+      answers[n] = els.length > 1 ? els.map(function (e) { return e.value; }) : els[0].value;
+    });
+    ['q6','q12'].forEach(function (n) {
+      var el = document.querySelector('[name="' + n + '"]');
+      if (el && el.value.trim()) answers[n] = el.value.trim().slice(0, 300);
+    });
+    var err = document.getElementById('err');
+    if (missing.length) {
+      err.style.display = 'block';
+      err.textContent = '还有 ' + missing.length + ' 题没选，往上翻一下～';
+      var first = document.querySelector('[data-q="' + missing[0] + '"]');
+      if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    err.style.display = 'none';
+    btn.disabled = true; btn.textContent = '正在提交…';
+    sendAnswers(answers, (function () {
+      try {
+        var t = localStorage.getItem('mbw_token');
+        if (!t) {
+          t = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
+            : 't-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+          localStorage.setItem('mbw_token', t);
+        }
+        return t;
+      } catch (e) { return 'no-store'; }
+    })()).then(function (r) {
+      return r.json().then(function (j) { return { status: r.status, j: j }; }).catch(function () { return { status: r.status, j: {} }; });
+    }).then(function (res) {
+      var j = res.j || {};
+      if (res.status === 409 || j.code === 'DUPLICATE_IP' || j.code === 'DUPLICATE_DEVICE') {
+        try { localStorage.setItem('mbw_submitted', '1'); } catch (e) {}
+        document.getElementById('form').style.display = 'none';
+        document.querySelector('footer').style.display = 'none';
+        var d0 = document.getElementById('done');
+        d0.style.display = 'block';
+        var hh = d0.querySelector('h1') || d0.querySelector('h2');
+        if (hh) hh.textContent = (j.code === 'DUPLICATE_DEVICE' ? '这台设备已经提交过啦' : '这个网络已经提交过啦');
+        var p0 = d0.querySelectorAll('p');
+        if (p0[0]) p0[0].innerHTML = (j.code === 'DUPLICATE_DEVICE'
+            ? '这台设备已经填过一次了，谢谢你～<br>如果确实没填过（比如清理过浏览器数据），联系我清一下记录。'
+            : '同一条网络只能填一次，你已经填过了，谢谢你～<br>如果是和同学共用学校/宿舍 WiFi，请他换手机流量再试一次。');
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (res.status === 428 || j.code === 'NEED_PASS') {
+        btn.disabled = false; btn.textContent = '提交问卷';
+        err.style.display = 'block';
+        err.textContent = '请先在下面填一下「填写暗号」再提交～';
+        var pb = document.getElementById('pass');
+        if (pb) { pb.scrollIntoView({ behavior: 'smooth', block: 'center' }); pb.focus(); }
+        return;
+      }
+      if (j.ok || res.status === 201) {
+        try { localStorage.setItem('mbw_submitted', '1'); } catch (e) {}
+        document.getElementById('form').style.display = 'none';
+        document.querySelector('footer').style.display = 'none';
+        document.getElementById('done').style.display = 'block';
+        window.scrollTo(0, 0);
+      } else { throw new Error('bad'); }
+    }).catch(function (err0) {
+      if (err0 && err0.code === 'BAD_PASS') {
+        btn.disabled = false; btn.textContent = '提交问卷';
+        err.style.display = 'block';
+        err.textContent = '暗号不对，再看一下我发的口令～';
+        return;
+      }
+
+      btn.disabled = false; btn.textContent = '提交问卷';
+      err.style.display = 'block'; err.textContent = '网络不太稳，再点一次试试～';
+    });
+  });
+
+  progress();
+
+  // 本机已提交过：直接显示已提交状态（不清空，以防误判，仍可点提交走服务端判断）
+  try {
+    if (localStorage.getItem('mbw_submitted') === '1') {
+      var tip = document.createElement('div');
+      tip.className = 'notice';
+      tip.innerHTML = '<b>提示</b><span>这台设备已经提交过本问卷；如果还要再填一份，请换设备或换网络。</span>';
+      var hd = document.querySelector('header');
+      if (hd && hd.parentNode) hd.parentNode.insertBefore(tip, hd.nextSibling);
+    }
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>
