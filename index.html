@@ -370,7 +370,7 @@
         try { localStorage.setItem('mbw_submitted', '1'); } catch (e) {}
         document.getElementById('form').style.display = 'none';
         document.querySelector('footer').style.display = 'none';
-        document.getElementById('done').style.display = 'block';
+        var _pbx = document.querySelector('.passbox'); if (_pbx) _pbx.style.display = 'none';var _pin = document.getElementById('pass'); if (_pin) _pin.value = ''; document.getElementById('done').style.display = 'block';
         window.scrollTo(0, 0);
       } else { throw new Error('bad'); }
     }).catch(function (err0) {
